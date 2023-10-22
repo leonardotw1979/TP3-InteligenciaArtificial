@@ -1,0 +1,31 @@
+// Carga la imagen de entrada
+Image<Bgr, Byte> image = new Image<Bgr, Byte>("image.jpg");
+
+// Inicializa la matriz de neuronas
+int width = image.Width;
+int height = image.Height;
+int n_neurons = width * height;
+
+// Crea la matriz de neuronas
+Neuron[] neurons = new Neuron[n_neurons];
+for (int i = 0; i < n_neurons; i++) {
+  neurons[i] = new Neuron();
+}
+
+// Inicializa la matriz de neuronas con los valores de los píxeles de la imagen de entrada
+for (int i = 0; i < n_neurons; i++) {
+  neurons[i].State = image.Data[i];
+}
+
+// Aplica el algoritmo de Hopfield a la matriz de neuronas
+HopfieldAlgorithm hopfield = new HopfieldAlgorithm(neurons);
+hopfield.Run();
+
+// Obtiene la imagen resultante del algoritmo de Hopfield
+Image<Bgr, Byte> result = new Image<Bgr, Byte>(width, height);
+for (int i = 0; i < n_neurons; i++) {
+  result.Data[i] = neurons[i].State;
+}
+
+// Muestra la imagen resultante
+result.Save("result.jpg");
